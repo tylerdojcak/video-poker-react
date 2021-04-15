@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [https://tylerdojcak.github.io/video-poker-react/](https://tylerdojcak.github.io/video-poker-react/) to view it in the browser.
 
 ## Five-Card Draw Rules
 
