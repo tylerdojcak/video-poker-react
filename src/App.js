@@ -113,7 +113,7 @@ function App() {
     return ranks[4] - ranks[0] === 4 && Object.values(counts).length === 5;
   }
 
-  function isMultiCard(hand, counts) {
+  function isMultiCard(counts, jacksOrBetter = ["JACK", "QUEEN", "KING", "ACE"]) {
     if (Object.values(counts).length === 2) {
       if (Object.values(counts).includes(1)) {
         return "FOUR OF A KIND!";
@@ -126,11 +126,15 @@ function App() {
       } else {
         return "TWO PAIR!";
       }
-    } else if (Object.values(counts).length === 4) {
-      return "PAIR!";
+    } else if (Object.values(counts).length === 4 && jacksOrBetter.includes(getPairValue(counts))) {
+      return "PAIR! (JACKS OR BETTER)";
     } else {
-      return "High card! Try again!";
+      return "High card!";
     }
+  }
+
+  function getPairValue(object) {
+    return Object.keys(object).find((key) => object[key] === 2);
   }
 
   function evaluate(hand) {
@@ -152,7 +156,7 @@ function App() {
     } else if (isFiveHighStraight(hand) || isStraight(hand, counts)) {
       setEvaluation("STRAIGHT!");
     } else {
-      setEvaluation(isMultiCard(hand, counts));
+      setEvaluation(isMultiCard(counts));
     }
   }
 
