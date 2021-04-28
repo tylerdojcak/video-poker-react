@@ -129,7 +129,7 @@ function App() {
     } else if (Object.values(counts).length === 4 && jacksOrBetter.includes(getPairValue(counts))) {
       return "PAIR! (JACKS OR BETTER)";
     } else {
-      return "High card!";
+      return "Try Again!";
     }
   }
 
