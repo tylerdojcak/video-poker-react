@@ -42,12 +42,6 @@ function App() {
             card.suit = res.cards[0].suit;
             card.image = res.cards[0].image;
             card.selected = false;
-            /*card = {
-              value: res.cards[0].value,
-              suit: res.cards[0].suit,
-              image: res.cards[0].image,
-              selected: false
-            };*/
           });
       }
     }
