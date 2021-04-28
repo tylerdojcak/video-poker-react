@@ -65,6 +65,15 @@ function App() {
     setHand(updatedHand);
   }
 
+  function isRoyalFlush(hand, aceHighStraight = ["10", "ACE", "JACK", "KING", "QUEEN"]) {
+    let ranks = [];
+    for (let card of hand) {
+      ranks.push(card.value);
+    }
+    ranks.sort()
+    return isFlush(hand) && ranks.every((v, i) => v === aceHighStraight[i]);
+  }
+
   function isFlush(hand) {
     let suits = [];
     for (let card of hand) {
