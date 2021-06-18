@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import './App.css';
 import Card from "./Components/Card/Card";
+import Funds from "./Components/Inputs/Funds";
+import Wager from "./Components/Inputs/Wager";
 
 function App() {
   let [hand, setHand] = useState([]);
   let [disabled, setDisabled] = useState(true);
   let [evaluation, setEvaluation] = useState("");
-
+  let [score, setScore] = useState(Number(0));
+  let [funds, setFunds] = useState(0);
+  let [wager, setWager] = useState(0);
   let [deck, setDeck] = useState("");
 
   function getNewDeck() {
@@ -16,6 +20,7 @@ function App() {
   }
 
   async function drawFive() {
+    setScore(Number(score) - Number(wager));
     setEvaluation("");
     setHand([]);
     let newHand = [];
@@ -41,9 +46,7 @@ function App() {
     const updatedHand = hand.slice();
     for (let card of updatedHand) {
       if (card.selected) {
-        await fetch(
-          `https://deckofcardsapi.com/api/deck/${deck}/draw/?count=1`
-        )
+        await fetch(`https://deckofcardsapi.com/api/deck/${deck}/draw/?count=1`)
           .then((res) => res.json())
           .then((res) => {
             card.value = res.cards[0].value;
@@ -53,8 +56,8 @@ function App() {
           });
       }
     }
-    setHand(updatedHand);
     setDisabled(!disabled);
+    setHand(updatedHand);
     evaluate(hand);
   }
 
@@ -154,7 +157,10 @@ function App() {
         counts[card.value] = 1;
       }
     }
-    if (
+    if (isRoyalFlush(hand)) {
+      setScore(Number(score) + Number(250 * wager));
+      setEvaluation("ROYAL FLUSH!");
+    } else if (
       isFlush(hand) &&
       (isFiveHighStraight(hand) || isStraight(hand, counts))
     ) {
@@ -166,6 +172,19 @@ function App() {
     } else {
       setEvaluation(isMultiCard(counts));
     }
+  }
+
+  function handleWagerChange(e) {
+    setWager(e.target.value);
+  }
+
+  function handleFundsChange(e) {
+    setFunds(e.target.value);
+  }
+
+  function handleAddFunds() {
+    setScore(Number(score) + Number(funds));
+    setFunds(0);
   }
 
   let currentHand = hand.map((card, i) => (
@@ -192,6 +211,14 @@ function App() {
         </button>
       </div>
       <div className="evaluation">{evaluation}</div>
+      <div className="input-container">
+        <Wager wagerAmount={wager} handleWagerChange={handleWagerChange} />
+        <Funds
+          fundsAmount={funds}
+          handleFundsChange={handleFundsChange}
+          handleAddFunds={handleAddFunds}
+        />
+      </div>
       <div className="new-deck">
         <button className="new-deck-button" onClick={getNewDeck}>
           New Deck
