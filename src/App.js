@@ -7,12 +7,20 @@ function App() {
   let [disabled, setDisabled] = useState(true);
   let [evaluation, setEvaluation] = useState("");
 
+  let [deck, setDeck] = useState("");
+
+  function getNewDeck() {
+    fetch("https://deckofcardsapi.com/api/deck/new/")
+      .then((res) => res.json())
+      .then((res) => setDeck(res.deck_id));
+  }
+
   async function drawFive() {
     setEvaluation("");
     setHand([]);
     let newHand = [];
-    await fetch("https://deckofcardsapi.com/api/deck/alanuelczxce/shuffle/");
-    fetch("https://deckofcardsapi.com/api/deck/alanuelczxce/draw/?count=5")
+    await fetch(`https://deckofcardsapi.com/api/deck/${deck}/shuffle/`);
+    fetch(`https://deckofcardsapi.com/api/deck/${deck}/draw/?count=5`)
       .then((res) => res.json())
       .then((res) => {
         for (let cardObj of res.cards) {
@@ -34,7 +42,7 @@ function App() {
     for (let card of updatedHand) {
       if (card.selected) {
         await fetch(
-          "https://deckofcardsapi.com/api/deck/alanuelczxce/draw/?count=1"
+          `https://deckofcardsapi.com/api/deck/${deck}/draw/?count=1`
         )
           .then((res) => res.json())
           .then((res) => {
@@ -184,6 +192,11 @@ function App() {
         </button>
       </div>
       <div className="evaluation">{evaluation}</div>
+      <div className="new-deck">
+        <button className="new-deck-button" onClick={getNewDeck}>
+          New Deck
+        </button>
+      </div>
     </>
   );
 }
