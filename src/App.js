@@ -11,7 +11,7 @@ function App() {
   let [score, setScore] = useState(Number(0));
   let [funds, setFunds] = useState(0);
   let [wager, setWager] = useState(0);
-  let [deck, setDeck] = useState("");
+  let [deck, setDeck] = useState("56c5o3inybix");
 
   function getNewDeck() {
     fetch("https://deckofcardsapi.com/api/deck/new/")
